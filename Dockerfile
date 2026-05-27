@@ -4,6 +4,8 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
     unzip \
+    nodejs \
+    npm \
     && docker-php-ext-install zip pdo pdo_mysql
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -13,6 +15,8 @@ WORKDIR /var/www/html
 COPY . .
 
 RUN composer install --optimize-autoloader --no-dev
+
+RUN npm install && npm run build
 
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
