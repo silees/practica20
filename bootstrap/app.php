@@ -16,6 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Configuramos Laravel para que confíe en los proxies de Render y use HTTPS
+        $middleware->trustProxies(at: '*');
+
+        // Tus alias de middleware existentes
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);
