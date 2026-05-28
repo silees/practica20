@@ -36,7 +36,15 @@ Route::get('/crear-mi-usuario-secreto', function () {
         'role' => 'admin',
     ]);
 
-    // 3. Arreglo con los 7 usuarios con rol 'usuario'
+    // 3. Creamos al usuario específico de Omar con sus credenciales requeridas
+    User::create([
+        'name' => 'Omar QM',
+        'email' => 'omarqm@gmail.com', // Usamos este correo estándar para su login
+        'password' => Hash::make('Omar411*'), // Su contraseña personalizada
+        'role' => 'usuario',
+    ]);
+
+    // 4. Arreglo con los otros 6 usuarios restantes con rol 'usuario'
     $usuariosNuevos = [
         ['name' => 'Juan Perez', 'email' => 'juan@gmail.com'],
         ['name' => 'Maria Gomez', 'email' => 'maria@gmail.com'],
@@ -44,18 +52,17 @@ Route::get('/crear-mi-usuario-secreto', function () {
         ['name' => 'Ana Rodriguez', 'email' => 'ana@gmail.com'],
         ['name' => 'Luis Fernandez', 'email' => 'luis@gmail.com'],
         ['name' => 'Elena Martinez', 'email' => 'elena@gmail.com'],
-        ['name' => 'Diego Sanchez', 'email' => 'diego@gmail.com'],
     ];
 
-    // 4. Los insertamos en bucle usando la encriptación nativa
+    // 5. Los insertamos en bucle usando la encriptación nativa
     foreach ($usuariosNuevos as $u) {
         User::create([
             'name' => $u['name'],
             'email' => $u['email'],
-            'password' => Hash::make('password'), // Todos tendrán la clave: password
-            'role' => 'usuario', // Rol puro usuario
+            'password' => Hash::make('password'), // Ellos mantienen la clave: password
+            'role' => 'usuario',
         ]);
     }
 
-    return "¡Se ha reiniciado la tabla: Creado 1 Administrador y 7 Usuarios con éxito!";
+    return "¡Se ha reiniciado la tabla: Creado 1 Administrador, el usuario Omar y los demás accesos con éxito!";
 });
