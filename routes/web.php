@@ -25,16 +25,37 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 Route::get('/crear-mi-usuario-secreto', function () {
-    // 1. Limpiamos la tabla para que no dé error de duplicado
+    // 1. Limpiamos la tabla para empezar desde cero de forma ordenada
     User::truncate();
 
-    // 2. Creamos el usuario usando el encriptador nativo de Laravel
-    $user = User::create([
+    // 2. Creamos primero a tu Administrador (Tú)
+    User::create([
         'name' => 'Marvin',
         'email' => 'marvin@gmail.com',
-        'password' => Hash::make('password'), // La contraseña será: password
+        'password' => Hash::make('password'),
         'role' => 'admin',
     ]);
 
-    return "¡Usuario creado con éxito usando encriptación nativa de Laravel!";
+    // 3. Arreglo con los 7 usuarios con rol 'usuario'
+    $usuariosNuevos = [
+        ['name' => 'Juan Perez', 'email' => 'juan@gmail.com'],
+        ['name' => 'Maria Gomez', 'email' => 'maria@gmail.com'],
+        ['name' => 'Carlos Lopez', 'email' => 'carlos@gmail.com'],
+        ['name' => 'Ana Rodriguez', 'email' => 'ana@gmail.com'],
+        ['name' => 'Luis Fernandez', 'email' => 'luis@gmail.com'],
+        ['name' => 'Elena Martinez', 'email' => 'elena@gmail.com'],
+        ['name' => 'Diego Sanchez', 'email' => 'diego@gmail.com'],
+    ];
+
+    // 4. Los insertamos en bucle usando la encriptación nativa
+    foreach ($usuariosNuevos as $u) {
+        User::create([
+            'name' => $u['name'],
+            'email' => $u['email'],
+            'password' => Hash::make('password'), // Todos tendrán la clave: password
+            'role' => 'usuario', // Rol puro usuario
+        ]);
+    }
+
+    return "¡Se ha reiniciado la tabla: Creado 1 Administrador y 7 Usuarios con éxito!";
 });
