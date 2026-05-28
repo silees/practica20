@@ -1,12 +1,14 @@
 FROM php:8.2-apache
 
+# 1. Agregamos libpq-dev para que compile Postgres e instalamos pdo_pgsql
 RUN apt-get update && apt-get install -y \
     libzip-dev \
+    libpq-dev \
     zip \
     unzip \
     nodejs \
     npm \
-    && docker-php-ext-install zip pdo pdo_mysql
+    && docker-php-ext-install zip pdo pdo_mysql pdo_pgsql
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -27,3 +29,6 @@ RUN sed -i 's|/var/www/html|${APACHE_DOCUMENT_ROOT}|g' /etc/apache2/sites-availa
 RUN a2enmod rewrite
 
 EXPOSE 80
+
+# 2. Comando final: ejecuta las migraciones y luego levanta Apache en primer plano
+CMD php artisan migrate --force && apache2-foreground
